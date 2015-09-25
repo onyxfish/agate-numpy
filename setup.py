@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-import sys
 
 install_requires = [
     'agate>=0.10.0',

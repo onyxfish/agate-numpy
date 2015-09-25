@@ -13,6 +13,8 @@ import numpy
 
 import agatenumpy
 
+agatenumpy.patch()
+
 class TestNumpy(unittest.TestCase):
     def setUp(self):
         self.rows = (
