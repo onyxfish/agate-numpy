@@ -23,7 +23,7 @@ class TableNumpy(object):
         """
         pass
 
-    def _make_numpy_column(self, column_name, column_type):
+    def _make_numpy_column(self, column):
         """
         Creates a numpy dtype from agate column data.
 
@@ -33,14 +33,14 @@ class TableNumpy(object):
         numpy_column_type = None
 
         for agate_type, numpy_type in NUMPY_TYPE_MAP.items():
-            if isinstance(column_type, agate_type):
+            if isinstance(column.data_type, agate_type):
                 numpy_column_type = numpy_type
                 break
 
         if numpy_column_type is None:
-            raise ValueError('Unsupported column type: %s' % column_type)
+            raise ValueError('Unsupported column type: %s' % column.data_type)
 
-        return (column_name, numpy_column_type)
+        return (column.name, numpy_column_type)
 
     def to_numpy(self):
         """
@@ -57,8 +57,8 @@ class TableNumpy(object):
         """
         numpy_types = []
 
-        for i, (column_name, column_type) in enumerate(zip(self.column_names, self.column_types)):
-            numpy_types.append(self._make_numpy_column(column_name, column_type))
+        for i, column in enumerate(self.columns):
+            numpy_types.append(self._make_numpy_column(column))
 
         data = [tuple([c for c in row]) for row in self.rows]
 
