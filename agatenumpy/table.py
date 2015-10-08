@@ -82,7 +82,7 @@ class TableNumpy(object):
 
         data = []
 
-        for row in self.rows:
+        for row in self._rows:
             data.append(tuple(conversion_funcs[i](v) for i, v in enumerate(row)))
 
         return numpy.array(data, dtype=numpy_types)
