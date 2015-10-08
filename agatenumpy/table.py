@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 
-from datetime import datetime
-from decimal import Decimal
-
 import agate
-
 import numpy
 
 #: Maps agate data types to numpy data types
@@ -14,7 +10,7 @@ NUMPY_TYPE_MAP = {
     agate.Date: 'datetime64[D]',
     agate.DateTime: 'datetime64[us]',
     agate.TimeDelta: 'timedelta64[us]',
-    agate.Text: 'unicode_'
+    agate.Text: object
 }
 
 class TableNumpy(object):
@@ -48,15 +44,20 @@ class TableNumpy(object):
 
     def to_numpy(self):
         """
-        Convert this table to an equivalent numpy array. Note that
-        :class:`.Date` columns are not supported since numpy does not have a
-        corresponding data type.
+        Convert this table to an equivalent numpy array. This conversion is
+        lossless with one exception: numpy converts :code:`None` in
+        :class:`.Boolean` columns to :code:`False`.
+
+        :class:`.Text` columns will be converted to numpy's :code:`object`
+        dtype. This will impact performance of operations on the resulting
+        array. For optimal performance remove :class:`.Text` columns before
+        converting to numpy.
 
         Monkey patched as instance method :meth:`.Table.to_numpy`.
         """
         numpy_types = []
 
-        for column_name, column_type in zip(self.column_names, self.column_types):
+        for i, (column_name, column_type) in enumerate(zip(self.column_names, self.column_types)):
             numpy_types.append(self._make_numpy_column(column_name, column_type))
 
         data = [tuple([c for c in row]) for row in self.rows]
