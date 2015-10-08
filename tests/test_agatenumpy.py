@@ -43,7 +43,7 @@ class TestNumpy(unittest.TestCase):
 
         self.assertEqual(len(numpy_table), len(self.table.rows))
         numpy.testing.assert_array_equal(numpy_table['number'], [1, 2, numpy.nan])
-        numpy.testing.assert_array_equal(numpy_table['text'], [u'a', u'b', None])
+        numpy.testing.assert_array_equal(numpy_table['text'], [u'a', u'b', u''])
         numpy.testing.assert_array_equal(numpy_table['boolean'], [True, False, False])
         numpy.testing.assert_array_equal(numpy_table['date'], [date(2015, 10, 1), date(2015, 11, 1), None])
         numpy.testing.assert_array_equal(numpy_table['datetime'], [datetime(2015, 10, 1, 12, 30), datetime(2015, 11, 1, 12, 45), None])
