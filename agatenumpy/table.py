@@ -13,6 +13,10 @@ NUMPY_TYPE_MAP = {
     # agate.Text: object    # See :meth:`TableNumpy._make_numpy_column`
 }
 
+AGATE_TYPE_MAP = {
+
+}
+
 CONVERSION_FUNCS = {
     agate.Boolean: lambda v: v,
     agate.Number: lambda v: v,
@@ -58,7 +62,7 @@ class TableNumpy(object):
 
     def to_numpy(self):
         """
-        Convert this table to an equivalent numpy array.
+        Convert this table to an equivalent numpy :code:`recarray`.
 
         This conversion is lossless with a couple notable exceptions:
 
@@ -85,4 +89,4 @@ class TableNumpy(object):
         for row in self._rows:
             data.append(tuple(conversion_funcs[i](v) for i, v in enumerate(row)))
 
-        return numpy.array(data, dtype=numpy_types)
+        return numpy.rec.array(data, dtype=numpy_types)

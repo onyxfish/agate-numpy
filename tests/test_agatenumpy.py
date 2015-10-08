@@ -51,7 +51,16 @@ class TestNumpy(unittest.TestCase):
             'timedelta64[us]'
         ]
 
-        numpy_table = numpy.array(data, dtype=zip(self.column_names, numpy_types))
+        numpy_table = numpy.rec.array(data, dtype=zip(self.column_names, numpy_types))
+
+        # for name, dtype in numpy_table.dtype:
+
+        print numpy_table
+
+        for column_name in numpy_table.dtype.names:
+            numpy_type = numpy_table.dtype.fields[column_name][0]
+
+            print numpy_type.type, numpy_type.descr
 
         table = agate.Table.from_numpy(numpy_table)
 
@@ -65,6 +74,8 @@ class TestNumpy(unittest.TestCase):
 
     def test_to_numpy(self):
         numpy_table = self.table.to_numpy()
+
+        print type(numpy_table)
 
         self.assertEqual(len(numpy_table), len(self.table.rows))
         numpy.testing.assert_array_equal(numpy_table['number'], [1, 2, numpy.nan])
